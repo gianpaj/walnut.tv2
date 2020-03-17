@@ -1,5 +1,5 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 // The configuration below is not sensitive data. You can serenely add your config here
 const config = {
@@ -9,7 +9,7 @@ const config = {
   projectId: 'ucutv-219215',
   storageBucket: 'ucutv-219215.appspot.com',
   messagingSenderId: '467558405283',
-  appId: '1:467558405283:web:69f44f22258fde52ccdb16'
-}
+  appId: '1:467558405283:web:69f44f22258fde52ccdb16',
+};
 
-firebase.initializeApp(config)
+firebase.initializeApp(config);

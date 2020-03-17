@@ -7,9 +7,9 @@
 <script>
 export default {
   props: {
-    product: Object
-  }
-}
+    product: Object,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

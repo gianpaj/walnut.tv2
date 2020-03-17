@@ -18,18 +18,18 @@
 </template>
 
 <script>
-import ProductItem from '@/components/ProductItem'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import ProductItem from '@/components/ProductItem';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
   components: { ProductItem },
   computed: {
     ...mapGetters('products', ['isProductDeletionPending']),
     ...mapState('products', ['products']),
-    ...mapState('app', ['networkOnLine'])
+    ...mapState('app', ['networkOnLine']),
   },
-  methods: mapActions('products', ['deleteUserProduct'])
-}
+  methods: mapActions('products', ['deleteUserProduct']),
+};
 </script>
 
 <style lang="scss" scoped>
