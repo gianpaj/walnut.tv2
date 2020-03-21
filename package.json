@@ -23,11 +23,14 @@
     "is_js": "^0.9.0",
     "lodash": "^4.17.15",
     "pwacompat": "^2.0.9",
+    "reddit.js": "^0.1.4",
     "register-service-worker": "^1.6.2",
+    "tippy.js": "^6.1.0",
     "vue": "^2.6.10",
     "vue-head": "^2.1.1",
     "vue-router": "^3.0.6",
-    "vuex": "^3.1.1"
+    "vuex": "^3.1.1",
+    "youtube-api-v3-search": "^1.2.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.132",
