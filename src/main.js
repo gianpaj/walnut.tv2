@@ -4,9 +4,9 @@ import 'pwacompat';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import '@/misc/register-service-worker';
+// import '@/misc/register-service-worker';
 import '@/misc/handle-network-status';
-import '@/misc/handle-apple-install-prompt';
+// import '@/misc/handle-apple-install-prompt';
 import '@/firebase/init';
 import '@/firebase/authentication';
 
