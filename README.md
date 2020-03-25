@@ -1,4 +1,4 @@
-# My bento-starter project
+# Walnut.tv 2.0
 
 ## Documentation
 

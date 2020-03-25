@@ -1,19 +1,19 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="login-page-title">Login page</h1>
+    <h3 class="login-page-title">Login to save your channels 📺</h3>
 
     <!-- Loader -->
     <div v-show="user === undefined" data-test="loader">Authenticating...</div>
 
     <!-- Offline instruction -->
     <div v-show="!networkOnLine" data-test="offline-instruction">
-      Please check your connection, login feature is not available offline.
+      Please check your connection to be able to login.
     </div>
 
     <p v-if="loginError">{{ loginError }}</p>
     <!-- Auth UI -->
     <div v-show="user !== undefined && !user && networkOnLine" data-test="login-btn" class="login-btn" @click="login">
-      Login with google
+      Login with Google
     </div>
   </div>
 </template>
@@ -99,7 +99,8 @@ export default {
     border: 1px solid;
     display: inline-block;
     border-radius: 3px;
-    border-color: #2c3e50;
+    border-color: $light-gray-color;
+    color: $white-color;
 
     &:hover {
       color: $vue-color;

@@ -1,11 +1,18 @@
 /* Misc */
 
-$vue-color: #46bd87;
+$vue-color: #ffec00;
 $danger-color: #ea4d46;
+$dark-color: #0e0e0e;
+$white-color: #ffffff;
+$light-gray-color: hsl(0, 0%, 35%);
+$gray-color: #2c3e50;
+$gray2-color: #4e4e4e;
+
+$background-color: $dark-color;
 
 /* Navbar */
 
 $navbar-height: 3.6rem;
-$navbar-color: #fff;
+$navbar-color: $dark-color;
 $navbar-offline-color: #333;
-$navbar-link-color: #2c3e50;
+$navbar-link-color: $white-color;
