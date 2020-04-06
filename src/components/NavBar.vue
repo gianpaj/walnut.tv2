@@ -12,8 +12,8 @@
         </li>
       </ul>
 
-      <div class="links">
-        <!-- desktop -->
+      <!-- <div class="links">
+        <!- - desktop - ->
         <nav class="nav-links">
           <div class="nav-item">
             <router-link to="/products">Products</router-link>
@@ -28,14 +28,14 @@
         </nav>
 
         <img v-if="isUserLoggedIn && networkOnLine" class="user-picture can-hide" :src="user.photoURL" alt="Avatar" />
-      </div>
+      </div> -->
     </div>
   </header>
 </template>
 
 <script>
-import firebase from 'firebase/app';
-import { mapGetters, mapState } from 'vuex';
+// import firebase from 'firebase/app';
+import { mapState } from 'vuex';
 
 const channels = [
   {
@@ -98,15 +98,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('authentication', ['isUserLoggedIn']),
-    ...mapState('authentication', ['user']),
+    // ...mapGetters('authentication', ['isUserLoggedIn']),
+    // ...mapState('authentication', ['user']),
     ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle']),
   },
-  methods: {
-    async logout() {
-      await firebase.auth().signOut();
-    },
-  },
+  // methods: {
+  //   async logout() {
+  //     await firebase.auth().signOut();
+  //   },
+  // },
 };
 </script>
 

@@ -37,25 +37,25 @@ const router = new Router({
         authNotRequired: true,
       },
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import(/* webpackChunkName: "client-chunk-login" */ '@/views/Login.vue'),
-      meta: {
-        authNotRequired: true,
-      },
-    },
-    {
-      path: '/products',
-      name: 'products',
-      component: () => import(/* webpackChunkName: "client-chunk-products" */ '@/views/Products.vue'),
-    },
-    {
-      path: '/products/:id',
-      name: 'product',
-      props: true,
-      component: () => import(/* webpackChunkName: "client-chunk-product-details" */ '@/views/Product.vue'),
-    },
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: () => import(/* webpackChunkName: "client-chunk-login" */ '@/views/Login.vue'),
+    //   meta: {
+    //     authNotRequired: true,
+    //   },
+    // },
+    // {
+    //   path: '/products',
+    //   name: 'products',
+    //   component: () => import(/* webpackChunkName: "client-chunk-products" */ '@/views/Products.vue'),
+    // },
+    // {
+    //   path: '/products/:id',
+    //   name: 'product',
+    //   props: true,
+    //   component: () => import(/* webpackChunkName: "client-chunk-product-details" */ '@/views/Product.vue'),
+    // },
     { path: '*', redirect: '/home' },
   ],
 });
@@ -65,6 +65,7 @@ const router = new Router({
  */
 // eslint-disable-next-line consistent-return
 router.beforeEach((to, from, next) => {
+  // FIXME: use authRequired
   if (!(to.meta && to.meta.authNotRequired) && isNil(store.state.authentication.user)) {
     const path = store.state.authentication.user === null ? '/login' : '/check-login';
     return next(`${path}?redirectUrl=${to.path}`);
