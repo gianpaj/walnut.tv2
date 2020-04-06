@@ -1,5 +1,7 @@
 # Walnut.tv 2.0
 
-## Documentation
+https://walnut.tv
 
-Documentation available :point_right: [here](https://bento-starter.netlify.com/)
+## TODO
+
+- [ ] rename repo to walnut.tv
