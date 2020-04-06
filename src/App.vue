@@ -19,16 +19,20 @@
     </apple-add-to-home-screen-modal>
   </div>
 </template>
+
 <script>
 import NavBar from '@/components/NavBar';
 import NewContentAvailableToastr from '@/components/NewContentAvailableToastr';
-import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal';
+// import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default {
-  components: { NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal },
+  components: {
+    NavBar,
+    NewContentAvailableToastr,
+  },
   computed: {
     ...mapGetters('app', ['newContentAvailable']),
     ...mapState('app', ['showAddToHomeScreenModalForApple', 'refreshingApp']),

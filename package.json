@@ -1,6 +1,6 @@
 {
   "name": "walnut-tv2",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
