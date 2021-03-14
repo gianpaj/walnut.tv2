@@ -33,12 +33,11 @@
 </template>
 
 <script>
-
 export default {
   name: "VideoList",
   props: {
     videoList: Array,
-    play: Function
+    play: Function,
   },
   data() {
     return {

@@ -1,4 +1,4 @@
-import reddit from './reddit-package'
+import reddit from "./reddit-package";
 import { mixElementsFromArraysOfArrays } from "./utils";
 
 const youtubeURL = "http://www.youtube.com/watch?v=";

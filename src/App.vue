@@ -23,7 +23,7 @@ import RedditVideoService from "./services/reddit";
 import YouTubeService from "./services/youtube";
 import channels from "./channels";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const redditService = RedditVideoService();
 const youtubeService = YouTubeService();
@@ -102,26 +102,22 @@ export default {
     getChannelMinVotes: (channel) =>
       channels.find((c) => c.title == channel).minNumOfVotes,
     /**
-     * @param {string} searchText
+     * @param {string} subreddits
      */
-    fetchAllVideos(searchText) {
+    fetchAllVideos(subreddits) {
       let id, minNumOfVotes, ytChannels, promises;
-      let subreddits = searchText;
       const { pathname } = window.location;
-      this.contentType = "reddit";
       this.loadingVideos = true;
       this.videoMessage = loadingVideosMessage;
       // if changing channel - changeChannel()
-      if (!searchText) {
+      if (!subreddits) {
         if (pathname.split("/").length === 3) {
           id = pathname.split("/")[pathname.split("/").length - 1];
         }
 
         if (pathname.split("/r/").length > 1) {
           subreddits = this.channel;
-          promises = Promise.all([
-            redditService.loadHot(subreddits, minNumOfVotes),
-          ]);
+          promises = redditService.loadHot(subreddits, minNumOfVotes);
         } else {
           subreddits = this.getSubReddits(this.channel);
           ytChannels = this.getYouTubeChannels(this.channel);
@@ -221,7 +217,7 @@ export default {
      * @param {number} i
      */
     play(i) {
-      console.log('play', i)
+      console.log("play", i);
       this.playingVideo = this.videoList[i];
       this.videoPlaying = i;
       this.voted = 0;

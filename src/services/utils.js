@@ -65,4 +65,4 @@ export const setStorage = (key, t) => {
   if (storageAvailable()) {
     localStorage.setItem(key, t);
   }
-}
+};
