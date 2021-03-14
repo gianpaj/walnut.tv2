@@ -4,10 +4,18 @@
       <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
         <VideoList :videoList="videoList" :play="play" />
       </div>
-      <div v-show="loadingVideos">
-        <h2 class="loadingMessage" v-html="videoMessage"></h2>
-      </div>
     </div>
+  </div>
+  <div v-show="loadingVideos">
+    <h2 class="loadingMessage">
+      <span v-html="videoMessage" />
+      <img
+        v-show="showSpinner"
+        src="./assets/spin.svg"
+        class="loading"
+        alt="Loading Videos"
+      />
+    </h2>
   </div>
 </template>
 
@@ -28,8 +36,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const redditService = RedditVideoService();
 const youtubeService = YouTubeService();
 
-const loadingVideosMessage =
-  'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">';
+const loadingVideosMessage = "Loading Videos";
 
 export default {
   name: "App",
@@ -43,6 +50,7 @@ export default {
     return {
       autoplay: true,
       loadingVideos: true,
+      showSpinner: true,
       // channels,
       mobile,
       videoList: [],
@@ -108,6 +116,7 @@ export default {
       let id, minNumOfVotes, ytChannels, promises;
       const { pathname } = window.location;
       this.loadingVideos = true;
+      this.showSpinner = true;
       this.videoMessage = loadingVideosMessage;
       // if changing channel - changeChannel()
       if (!subreddits) {
@@ -157,6 +166,7 @@ export default {
               }))
             );
           }
+          this.showSpinner = false;
           if (redditVideos.length < 1 && youtubeVideos.length < 1) {
             this.videoMessage =
               "Sorry, we couldn't find any videos in /" + this.channel;
@@ -270,5 +280,11 @@ export default {
 .background-dark,
 body {
   background-color: #000;
+}
+
+.loadingMessage {
+  /* FIXME: this hack so the navbar doesn't jump when hiding/showing the videos and the loading spinner */
+  height: 100vh;
+  text-align: center;
 }
 </style>
