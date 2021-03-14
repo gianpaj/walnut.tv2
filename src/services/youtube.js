@@ -1,17 +1,17 @@
 import { mixElementsFromArraysOfArrays } from "./utils";
 
 export default function YouTubeService() {
-  function search(query) {
-    // from youtube-api-v3-search npm
-    // eslint-disable-next-line no-undef
-    return searchYoutube(youtubeApiKey, {
-      part: "snippet",
-      type: "video",
-      maxResults: "25",
-      // videoEmbeddable: 'true',
-      q: query,
-    }).then(formatResults);
-  }
+  // function search(query) {
+  //   // from youtube-api-v3-search npm
+  //   // eslint-disable-next-line no-undef
+  //   return searchYoutube(youtubeApiKey, {
+  //     part: "snippet",
+  //     type: "video",
+  //     maxResults: "25",
+  //     // videoEmbeddable: 'true',
+  //     q: query,
+  //   }).then(formatResults);
+  // }
   async function loadChannels(channel_s) {
     channel_s = channel_s.split(";");
     const searches = channel_s.map((channel) =>
@@ -48,12 +48,13 @@ export default function YouTubeService() {
     }));
   }
   return {
-    search,
+    // search,
     loadChannels,
   };
 }
 
-const toYouTubeImgUrl = id => `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+const toYouTubeImgUrl = (id) =>
+  `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
 
 const decodeEntities = (function() {
   // this prevents any overhead from creating the object each time

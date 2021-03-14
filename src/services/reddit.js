@@ -1,4 +1,3 @@
-// import reddit from "reddit";
 import reddit from './reddit-package'
 import { mixElementsFromArraysOfArrays } from "./utils";
 
