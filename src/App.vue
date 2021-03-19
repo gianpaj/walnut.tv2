@@ -5,6 +5,7 @@
       <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
         <VideoList :videoList="videoList" :play="play" />
       </div>
+      <PlayerContainer :playingVideo="playingVideo" />
     </div>
   </div>
   <div v-show="loadingVideos">
@@ -19,6 +20,7 @@
 /* global YT */
 import NavBar from './components/NavBar.vue';
 import VideoList from './components/VideoList.vue';
+import PlayerContainer from './components/PlayerContainer.vue';
 import { mixElementsFromArraysOfArrays, getStorage, setStorage } from './services/utils';
 import RedditVideoService from './services/reddit';
 import YouTubeService from './services/youtube';
@@ -35,22 +37,24 @@ export default {
   name: 'App',
   components: {
     NavBar,
+    PlayerContainer,
     VideoList,
   },
   data() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     return {
       autoplay: true,
-      loadingVideos: true,
-      showSpinner: true,
-      channels,
       channel: null,
-      mobile,
-      videoList: [],
-      videosWatched: [],
-      videoMessage: loadingVideosMessage,
+      channels,
       indexToPlay: 0,
+      loadingVideos: true,
+      mobile,
+      playingVideo: null,
+      showSpinner: true,
+      videoList: [],
+      videoMessage: loadingVideosMessage,
       videoPlaying: 0,
+      videosWatched: [],
       voted: 0,
     };
   },
@@ -279,5 +283,11 @@ body {
 .sidebar {
   display: table-cell;
   width: 360px;
+}
+
+@media (min-width: 993px) {
+  .hide-desktop {
+    display: none;
+  }
 }
 </style>
