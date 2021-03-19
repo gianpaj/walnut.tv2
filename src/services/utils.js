@@ -14,18 +14,18 @@ export function mixElementsFromArraysOfArrays(arrayOfArrays) {
   // find the smallest amount of videos for every channel
   const leastAmountOfVids = Math.min.apply(
     null,
-    arrayOfArrays.map((arr) => arr.length).filter((arr) => arr)
+    arrayOfArrays.map(arr => arr.length).filter(arr => arr)
   );
 
   if (arrayOfArrays.length === 1) {
     return arrayOfArrays;
   }
 
-  if (arrayOfArrays.filter((arr) => arr.length > 0).length === 0) {
+  if (arrayOfArrays.filter(arr => arr.length > 0).length === 0) {
     return [];
   }
 
-  arrayOfArrays = arrayOfArrays.filter((a) => a.length);
+  arrayOfArrays = arrayOfArrays.filter(a => a.length);
   let videos = [];
   // get one video of each channel in rotation
   for (let i = 0; i < leastAmountOfVids; i++) {
@@ -43,7 +43,7 @@ export function mixElementsFromArraysOfArrays(arrayOfArrays) {
   return videos;
 }
 
-export const getStorage = (key) => {
+export const getStorage = key => {
   if (storageAvailable() && localStorage.getItem(key)) {
     const t = localStorage.getItem(key);
     return JSON.parse(t);
@@ -52,7 +52,7 @@ export const getStorage = (key) => {
 
 const storageAvailable = () => {
   try {
-    const n = "__storage_test__";
+    const n = '__storage_test__';
     window.localStorage.setItem(n, n);
     window.localStorage.removeItem(n);
     return true;

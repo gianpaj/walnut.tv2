@@ -4,7 +4,7 @@ const reddit = {};
 reddit.hot = function(subreddit) {
   return listing({
     subreddit: subreddit,
-    resource: "hot",
+    resource: 'hot',
   });
 };
 
@@ -12,9 +12,9 @@ reddit.top = function(subreddit) {
   return listing(
     {
       subreddit: subreddit,
-      resource: "top",
+      resource: 'top',
     },
-    ["t"]
+    ['t']
   );
 };
 
@@ -22,59 +22,59 @@ reddit.controversial = function(subreddit) {
   return listing(
     {
       subreddit: subreddit,
-      resource: "controversial",
+      resource: 'controversial',
     },
-    ["t"]
+    ['t']
   );
 };
 
-reddit["new"] = function(subreddit) {
+reddit['new'] = function(subreddit) {
   return listing({
     subreddit: subreddit,
-    resource: "new",
+    resource: 'new',
   });
 };
 
 reddit.about = function(subreddit) {
   return fetch({
     subreddit: subreddit,
-    resource: "about",
+    resource: 'about',
   });
 };
 
 reddit.random = function(subreddit) {
   return fetch({
     subreddit: subreddit,
-    resource: "random",
+    resource: 'random',
   });
 };
 
 reddit.info = function(subreddit) {
   var on = {
     subreddit: subreddit,
-    resource: "api/info",
+    resource: 'api/info',
   };
-  return withFilters(on, ["id", "limit", "url"]);
+  return withFilters(on, ['id', 'limit', 'url']);
 };
 
 reddit.comments = function(article, subreddit) {
   var on = {
     subreddit: subreddit,
-    resource: "comments/" + article,
+    resource: 'comments/' + article,
   };
-  return withFilters(on, ["comment", "context", "depth", "limit", "sort"]);
+  return withFilters(on, ['comment', 'context', 'depth', 'limit', 'sort']);
 };
 
 reddit.recommendedSubreddits = function(srnames) {
   var on = {
-    resource: "api/recommend/sr/" + srnames,
+    resource: 'api/recommend/sr/' + srnames,
   };
-  return withFilters(on, ["omit"]);
+  return withFilters(on, ['omit']);
 };
 
 reddit.subredditsByTopic = function(query) {
   var on = {
-    resource: "api/subreddits_by_topic",
+    resource: 'api/subreddits_by_topic',
     params: {
       query: query,
     },
@@ -85,27 +85,17 @@ reddit.subredditsByTopic = function(query) {
 reddit.search = function(query, subreddit) {
   var on = {
     subreddit: subreddit,
-    resource: "search",
+    resource: 'search',
     params: {
       q: query,
     },
   };
-  return withFilters(on, [
-    "after",
-    "before",
-    "count",
-    "limit",
-    "restrict_sr",
-    "show",
-    "sort",
-    "syntax",
-    "t",
-  ]);
+  return withFilters(on, ['after', 'before', 'count', 'limit', 'restrict_sr', 'show', 'sort', 'syntax', 't']);
 };
 
 reddit.searchSubreddits = function(query) {
   return listing({
-    resource: "subreddits/search",
+    resource: 'subreddits/search',
     params: {
       q: query,
     },
@@ -114,41 +104,26 @@ reddit.searchSubreddits = function(query) {
 
 reddit.popularSubreddits = function() {
   return listing({
-    resource: "subreddits/popular",
+    resource: 'subreddits/popular',
   });
 };
 
 reddit.newSubreddits = function() {
   return listing({
-    resource: "subreddits/new",
+    resource: 'subreddits/new',
   });
 };
 
 reddit.user = function(username, where) {
   var on = {
-    resource:
-      "user/" + username + (typeof where === "undefined" ? "" : "/" + where),
+    resource: 'user/' + username + (typeof where === 'undefined' ? '' : '/' + where),
   };
-  return withFilters(on, [
-    "show",
-    "sort",
-    "t",
-    "type",
-    "username",
-    "after",
-    "before",
-    "count",
-    "limit",
-    "sr_detail",
-  ]);
+  return withFilters(on, ['show', 'sort', 't', 'type', 'username', 'after', 'before', 'count', 'limit', 'sr_detail']);
 };
 
 function listing(on, extras) {
   extras = extras || [];
-  return withFilters(
-    on,
-    ["after", "before", "count", "limit", "show"].concat(extras)
-  );
+  return withFilters(on, ['after', 'before', 'count', 'limit', 'show'].concat(extras));
 }
 
 function fetch(on) {
@@ -175,9 +150,9 @@ function withFilters(on, filters) {
   };
 
   var filter = function(f) {
-    if (f === "show") {
+    if (f === 'show') {
       return function() {
-        on.params[f] = "all";
+        on.params[f] = 'all';
         return without(this, f);
       };
     } else {
@@ -198,7 +173,7 @@ function withFilters(on, filters) {
 }
 
 function redditUrl(on) {
-  var url = "https://www.reddit.com/";
+  var url = 'https://www.reddit.com/';
   var keys = function(object) {
     var ret = [];
     for (var prop in object) {
@@ -210,19 +185,17 @@ function redditUrl(on) {
   };
 
   if (on.subreddit !== undefined) {
-    url += "r/" + on.subreddit + "/";
+    url += 'r/' + on.subreddit + '/';
   }
-  url += on.resource + ".json";
+  url += on.resource + '.json';
   if (keys(on.params).length > 0) {
     var qs = [];
     for (var param in on.params) {
       if (Object.prototype.hasOwnProperty.call(on.params, param)) {
-        qs.push(
-          encodeURIComponent(param) + "=" + encodeURIComponent(on.params[param])
-        );
+        qs.push(encodeURIComponent(param) + '=' + encodeURIComponent(on.params[param]));
       }
     }
-    url += "?" + qs.join("&");
+    url += '?' + qs.join('&');
   }
   return url;
 }
@@ -239,7 +212,7 @@ function getJSON(url, res, err) {
 
 function get(url, res, err) {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
+  xhr.open('GET', url, true);
   xhr.onload = function() {
     return res(xhr.response);
   };

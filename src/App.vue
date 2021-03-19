@@ -10,45 +10,35 @@
   <div v-show="loadingVideos">
     <h2 class="loading-message">
       <span v-html="videoMessage" />
-      <img
-        v-show="showSpinner"
-        src="./assets/spin.svg"
-        class="loading"
-        alt="Loading Videos"
-      />
+      <img v-show="showSpinner" src="./assets/spin.svg" class="loading-img" alt="Loading Videos" />
     </h2>
   </div>
 </template>
 
 <script>
 /* global YT */
-import VideoList from "./components/VideoList.vue";
-import {
-  mixElementsFromArraysOfArrays,
-  getStorage,
-  setStorage,
-} from "./services/utils";
-import RedditVideoService from "./services/reddit";
-import YouTubeService from "./services/youtube";
-import channels from "./channels";
+import NavBar from './components/NavBar.vue';
+import VideoList from './components/VideoList.vue';
+import { mixElementsFromArraysOfArrays, getStorage, setStorage } from './services/utils';
+import RedditVideoService from './services/reddit';
+import YouTubeService from './services/youtube';
+import channels from './defaultChannels';
 
-import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const redditService = RedditVideoService();
 const youtubeService = YouTubeService();
 
-const loadingVideosMessage = "Loading Videos";
+const loadingVideosMessage = 'Loading Videos';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     NavBar,
     VideoList,
   },
   data() {
-    const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
+    const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     return {
       autoplay: true,
       loadingVideos: true,
@@ -67,9 +57,9 @@ export default {
     // The onYouTubeIframeAPIReady function will execute as soon as the player API code downloads
     // eslint-disable-next-line no-unused-vars
     window.onYouTubeIframeAPIReady = () => {
-      this.player = new YT.Player("player", {
-        height: "390",
-        width: "640",
+      this.player = new YT.Player('player', {
+        height: '390',
+        width: '640',
         //   videoId: youtubeId,
         events: {
           onReady: onPlayerReady,
@@ -81,7 +71,7 @@ export default {
           showinfo: 0,
           rel: 0,
           iv_load_policy: 3,
-          origin: "https://walnut.tv",
+          origin: 'https://walnut.tv',
         },
       });
     };
@@ -96,21 +86,18 @@ export default {
     function onPlayerStateChange(t) {
       0 === t.data && this.autoplay && this.nextVideo();
     }
-    const paths = window.location.pathname.split("/").filter((a) => a);
-    this.channel = paths.length === 1 ? paths[0] : "general";
+    const paths = window.location.pathname.split('/').filter((a) => a);
+    this.channel = paths.length === 1 ? paths[0] : 'general';
     this.fetchAllVideos();
-    window.addEventListener("keyup", this.keys);
+    window.addEventListener('keyup', this.keys);
   },
   beforeUnmount() {
-    window.removeEventListener("keyup", this.keys);
+    window.removeEventListener('keyup', this.keys);
   },
   methods: {
-    getSubReddits: (channel) =>
-      channels.find((c) => c.title == channel).subreddit,
-    getYouTubeChannels: (channel) =>
-      channels.find((c) => c.title == channel).youtubeChannels,
-    getChannelMinVotes: (channel) =>
-      channels.find((c) => c.title == channel).minNumOfVotes,
+    getSubReddits: (channel) => channels.find((c) => c.title == channel).subreddit,
+    getYouTubeChannels: (channel) => channels.find((c) => c.title == channel).youtubeChannels,
+    getChannelMinVotes: (channel) => channels.find((c) => c.title == channel).minNumOfVotes,
     /**
      * @param {string} subreddits
      */
@@ -122,11 +109,11 @@ export default {
       this.videoMessage = loadingVideosMessage;
       // if changing channel - changeChannel()
       if (!subreddits) {
-        if (pathname.split("/").length === 3) {
-          id = pathname.split("/")[pathname.split("/").length - 1];
+        if (pathname.split('/').length === 3) {
+          id = pathname.split('/')[pathname.split('/').length - 1];
         }
 
-        if (pathname.split("/r/").length > 1) {
+        if (pathname.split('/r/').length > 1) {
           subreddits = this.channel;
           promises = redditService.loadHot(subreddits, minNumOfVotes);
         } else {
@@ -140,19 +127,17 @@ export default {
         }
       } else {
         this.channel = null;
-        promises = Promise.all([
-          redditService.loadHot(subreddits, minNumOfVotes),
-        ]);
+        promises = Promise.all([redditService.loadHot(subreddits, minNumOfVotes)]);
       }
-      this.videosWatched = getStorage("videosWatched") || [];
+      this.videosWatched = getStorage('videosWatched') || [];
       promises
         .then((resolvers) => {
           const [redditVideos, youtubeVideos = []] = resolvers;
-          if (window.location.search == "?debug") {
+          if (window.location.search == '?debug') {
             // eslint-disable-next-line no-console
             console.log(
               redditVideos.map((v) => ({
-                subreddit: v.permalink.split("/r/")[1].split("/")[0],
+                subreddit: v.permalink.split('/r/')[1].split('/')[0],
                 title: v.title,
                 link: v.permalink,
                 youtubeId: v.youtubeId,
@@ -170,26 +155,19 @@ export default {
           }
           this.showSpinner = false;
           if (redditVideos.length < 1 && youtubeVideos.length < 1) {
-            this.videoMessage =
-              "Sorry, we couldn't find any videos in /" + this.channel;
+            this.videoMessage = "Sorry, we couldn't find any videos in /" + this.channel;
 
             if (this.searchInput) {
               this.videoMessage = `Sorry, we couldn't find any videos in /r/${this.searchInput}`;
             }
             return;
           }
-          this.videoList = mixElementsFromArraysOfArrays([
-            redditVideos,
-            youtubeVideos,
-          ]);
+          this.videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
           // if (searchText) window.history.replaceState(null, null, '/r/' + searchText);
           this.loadingVideos = false;
 
           // this.playingVideo = redditVideos;
-          if (
-            pathname.split("/").length === 3 &&
-            pathname.indexOf("/r/") === -1
-          ) {
+          if (pathname.split('/').length === 3 && pathname.indexOf('/r/') === -1) {
             // find video index to play
             let index = this.videoList.findIndex((v) => v.id === id);
             if (index !== -1) {
@@ -202,8 +180,7 @@ export default {
           this.play(0);
         })
         .catch((error) => {
-          this.videoMessage =
-            "Sorry, there was an error retrieving videos in /" + this.channel;
+          this.videoMessage = 'Sorry, there was an error retrieving videos in /' + this.channel;
           if (this.searchInput) {
             this.videoMessage = `Sorry, there was an error retrieving videos /r/${this.searchInput}`;
           }
@@ -213,30 +190,28 @@ export default {
     },
     keys(evt) {
       evt = evt || window.event;
-      if ("37" == evt.keyCode) {
+      if ('37' == evt.keyCode) {
         this.prevVideo();
-      } else if ("39" == evt.keyCode) {
+      } else if ('39' == evt.keyCode) {
         this.nextVideo();
       }
     },
     playVideo: function (t) {
       if (!this.player || !this.player.loadVideoById) return;
-      this.mobile
-        ? this.player.cueVideoById(t.youtubeId)
-        : this.player.loadVideoById(t.youtubeId);
+      this.mobile ? this.player.cueVideoById(t.youtubeId) : this.player.loadVideoById(t.youtubeId);
     },
     /**
      * @param {number} i
      */
     play(i) {
-      console.log("play", i);
+      console.log('play', i);
       this.playingVideo = this.videoList[i];
       this.videoPlaying = i;
       this.voted = 0;
       this.watched(this.playingVideo.youtubeId);
       this.playVideo(this.playingVideo);
       if (!this.channel) return;
-      if (this.playingVideo.permalink.includes("reddit.com")) {
+      if (this.playingVideo.permalink.includes('reddit.com')) {
         // window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
       }
       // else {
@@ -247,7 +222,7 @@ export default {
       if (-1 == this.videosWatched.indexOf(i)) {
         this.videosWatched.push(i);
         const t = JSON.stringify(this.videosWatched);
-        setStorage("videosWatched", t);
+        setStorage('videosWatched', t);
       }
     },
   },

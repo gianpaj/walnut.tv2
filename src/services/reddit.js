@@ -1,8 +1,8 @@
-import reddit from "./reddit-package";
-import { mixElementsFromArraysOfArrays } from "./utils";
+import reddit from './reddit-package';
+import { mixElementsFromArraysOfArrays } from './utils';
 
-const youtubeURL = "http://www.youtube.com/watch?v=";
-const embedLength = "/embed/".length;
+const youtubeURL = 'http://www.youtube.com/watch?v=';
+const embedLength = '/embed/'.length;
 
 export default function RedditVideoService() {
   /**
@@ -17,10 +17,7 @@ export default function RedditVideoService() {
     // return false;
 
     if (data.media !== null) {
-      return (
-        data.media.type.includes("youtube.com") ||
-        data.media.type.includes("vimeo.com")
-      );
+      return data.media.type.includes('youtube.com') || data.media.type.includes('vimeo.com');
     }
     return false;
   }
@@ -32,8 +29,7 @@ export default function RedditVideoService() {
     return video.data.ups >= upsMin;
   }
 
-  const toYouTubeImgUrl = (id) =>
-    `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+  const toYouTubeImgUrl = id => `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
 
   function childObjectToDomainVideoModel(video) {
     const { data } = video;
@@ -48,30 +44,30 @@ export default function RedditVideoService() {
     // reddit video
     if (data.is_video) {
       result.videoUrl = data.media.reddit_video.fallback_url;
-      result.type = "reddit";
+      result.type = 'reddit';
       return result;
     }
 
     // youtube video
-    if (data.media.type === "youtube.com") {
+    if (data.media.type === 'youtube.com') {
       const { oembed } = data.media;
-      result.type = "youtube";
+      result.type = 'youtube';
 
       if (oembed.url && oembed.url.indexOf(youtubeURL) === 0) {
         return (result.videoUrl = oembed.html.substring(youtubeURL.length));
       }
       const { html } = oembed;
-      const startIndex = html.indexOf("/embed/") + embedLength;
-      const endIndex = html.indexOf("?");
+      const startIndex = html.indexOf('/embed/') + embedLength;
+      const endIndex = html.indexOf('?');
       result.videoUrl = html.substring(startIndex, endIndex);
       result.youtubeId = html.substring(startIndex, endIndex);
       result.imgUrl = toYouTubeImgUrl(html.substring(startIndex, endIndex));
     }
 
     // vimeo video
-    if (data.media.type === "vimeo.com") {
-      result.videoUrl = "vimeo.com";
-      result.type = "vimeo";
+    if (data.media.type === 'vimeo.com') {
+      result.videoUrl = 'vimeo.com';
+      result.type = 'vimeo';
     }
 
     return result;
@@ -80,44 +76,39 @@ export default function RedditVideoService() {
   // eslint-disable-next-line no-unused-vars
   function dynamicSort(property) {
     let sortOrder = 1;
-    if (property[0] === "-") {
+    if (property[0] === '-') {
       sortOrder = -1;
       property = property.substr(1);
     }
     return function(a, b) {
-      const result =
-        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      const result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
     };
   }
 
   function _loadHot(channel, upsMin, after) {
     return new Promise((result, reject) => {
-      if (typeof channel !== "string") {
-        return reject(
-          new Error("Bad channel argument value. Channel should be a string")
-        );
+      if (typeof channel !== 'string') {
+        return reject(new Error('Bad channel argument value. Channel should be a string'));
       }
       let query = reddit.hot(channel).limit(50);
       if (after) query = query.after(after);
 
       query.fetch(
-        (res) => {
+        res => {
           if (res.error) return reject(res);
           let videos = res.data.children.filter(isVideoObject);
 
           if (upsMin) {
-            videos = videos.filter((vid) => filterByUpvotes(vid, upsMin));
+            videos = videos.filter(vid => filterByUpvotes(vid, upsMin));
           }
 
-          videos = videos
-            .map(childObjectToDomainVideoModel)
-            .filter((v) => v.type === "youtube");
+          videos = videos.map(childObjectToDomainVideoModel).filter(v => v.type === 'youtube');
 
           result(videos);
         },
         // err contains the error from Reddit
-        (err) => reject(err)
+        err => reject(err)
       );
     });
   }
@@ -130,9 +121,9 @@ export default function RedditVideoService() {
    * TODO: @ param {*} after reddit id to load more videos for multiple channels
    */
   async function loadHot(channel_s, upsMin) {
-    const channel_arr = channel_s.split(";");
+    const channel_arr = channel_s.split(';');
     // console.warn("fetching", channel_s.length, "channels");
-    const promises = channel_arr.map((channel) => _loadHot(channel, upsMin));
+    const promises = channel_arr.map(channel => _loadHot(channel, upsMin));
 
     const arrayOfArrayOfVideos = await Promise.all(promises);
 
@@ -140,9 +131,7 @@ export default function RedditVideoService() {
 
     const uniq = {};
     // remove duplicate videos
-    videos = videos.filter(
-      (arr) => !uniq[arr.videoUrl] && (uniq[arr.videoUrl] = true)
-    );
+    videos = videos.filter(arr => !uniq[arr.videoUrl] && (uniq[arr.videoUrl] = true));
 
     return [].concat.apply([], videos);
     // .sort(dynamicSort("created_utc"));
