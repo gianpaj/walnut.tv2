@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div>
     <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
       <li
         class="video"

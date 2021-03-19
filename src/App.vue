@@ -1,4 +1,5 @@
 <template>
+  <NavBar :channels="channels" />
   <div v-show="!loadingVideos">
     <div class="container">
       <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
@@ -7,7 +8,7 @@
     </div>
   </div>
   <div v-show="loadingVideos">
-    <h2 class="loadingMessage">
+    <h2 class="loading-message">
       <span v-html="videoMessage" />
       <img
         v-show="showSpinner"
@@ -41,6 +42,7 @@ const loadingVideosMessage = "Loading Videos";
 export default {
   name: "App",
   components: {
+    NavBar,
     VideoList,
   },
   data() {
@@ -51,7 +53,7 @@ export default {
       autoplay: true,
       loadingVideos: true,
       showSpinner: true,
-      // channels,
+      channels,
       mobile,
       videoList: [],
       videosWatched: [],
@@ -282,9 +284,24 @@ body {
   background-color: #000;
 }
 
-.loadingMessage {
+.loading-message {
   /* FIXME: this hack so the navbar doesn't jump when hiding/showing the videos and the loading spinner */
   height: 100vh;
   text-align: center;
+}
+.loading-img {
+  height: 30px;
+}
+
+.container {
+  background-color: #000;
+  display: table;
+  padding: 0;
+  width: 100%;
+}
+
+.sidebar {
+  display: table-cell;
+  width: 360px;
 }
 </style>
