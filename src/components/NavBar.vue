@@ -85,6 +85,7 @@ export default {
   name: 'NavBar',
   props: {
     channels: Array,
+    channel: String,
   },
   data() {
     return {

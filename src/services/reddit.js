@@ -4,6 +4,20 @@ import { mixElementsFromArraysOfArrays } from './utils';
 const youtubeURL = 'http://www.youtube.com/watch?v=';
 const embedLength = '/embed/'.length;
 
+/**
+ * @typedef Video
+ *
+ * @property {string} type 'reddit' | 'youtube' | 'vimeo
+ * @property {string} title
+ * @property {string} id
+ * @property {string} youtubeId
+ * @property {string} permalink
+ * @property {string} imgUrl
+ * @property {string} created_utc
+ * @property {number} ups
+ * @property {number} voted
+ */
+
 export default function RedditVideoService() {
   /**
    * @returns {boolean}
@@ -23,6 +37,9 @@ export default function RedditVideoService() {
   }
 
   /**
+   * @param {VideoResponse} video
+   * @param {number} upsMin
+   *
    * @returns {boolean}
    */
   function filterByUpvotes(video, upsMin) {
@@ -86,12 +103,21 @@ export default function RedditVideoService() {
     };
   }
 
-  function _loadHot(channel, upsMin, after) {
+  /**
+   * Load "hottest" video-only reddit posts
+   *
+   * @param {string} subreddit
+   * @param {number} [upsMin]
+   * @param {*} after
+   *
+   * @returns {Array<Videos>}
+   */
+  function _loadHot(subreddit, upsMin, after) {
     return new Promise((result, reject) => {
-      if (typeof channel !== 'string') {
-        return reject(new Error('Bad channel argument value. Channel should be a string'));
+      if (typeof subreddit !== 'string') {
+        return reject(new Error('Bad subreddit argument value. subreddit should be a string'));
       }
-      let query = reddit.hot(channel).limit(50);
+      let query = reddit.hot(subreddit).limit(50);
       if (after) query = query.after(after);
 
       query.fetch(
@@ -116,14 +142,12 @@ export default function RedditVideoService() {
   /**
    * Get videos from subreddit(s)
    *
-   * @param {string} channel_s one or more channels - e.g. 'funny' or' 'funny;cool'
+   * @param {string} subreddits one or more subreddit - e.g. 'funny' or' 'funny;cool'
    * @param {number} upsMin minimum amount of up votes per video
-   * TODO: @ param {*} after reddit id to load more videos for multiple channels
    */
-  async function loadHot(channel_s, upsMin) {
-    const channel_arr = channel_s.split(';');
-    // console.warn("fetching", channel_s.length, "channels");
-    const promises = channel_arr.map(channel => _loadHot(channel, upsMin));
+  async function loadHot(subreddits, upsMin) {
+    const subredditsArr = subreddits.split(';');
+    const promises = subredditsArr.map(subreddit => _loadHot(subreddit, upsMin));
 
     const arrayOfArrayOfVideos = await Promise.all(promises);
 

@@ -1,5 +1,5 @@
 <template>
-  <NavBar :channels="channels" />
+  <NavBar :channels="channels" :channel="channel" />
   <div v-show="!loadingVideos">
     <div class="container">
       <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
@@ -44,6 +44,7 @@ export default {
       loadingVideos: true,
       showSpinner: true,
       channels,
+      channel: null,
       mobile,
       videoList: [],
       videosWatched: [],
