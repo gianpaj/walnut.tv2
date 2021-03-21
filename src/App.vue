@@ -5,7 +5,7 @@
       <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
         <VideoList :videoList="videoList" :play="play" />
       </div>
-      <PlayerContainer :playingVideo="playingVideo" />
+      <PlayerContainer v-if="playingVideo" :playingVideo="playingVideo" />
     </div>
   </div>
   <div v-show="loadingVideos">
@@ -61,38 +61,6 @@ export default {
     };
   },
   mounted() {
-    // The onYouTubeIframeAPIReady function will execute as soon as the player API code downloads
-    // eslint-disable-next-line no-unused-vars
-    window.onYouTubeIframeAPIReady = () => {
-      this.player = new YT.Player('player', {
-        height: '390',
-        width: '640',
-        //   videoId: youtubeId,
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-          onError: onPlayerError,
-        },
-        playerVars: {
-          controls: 1,
-          showinfo: 0,
-          rel: 0,
-          iv_load_policy: 3,
-          origin: 'https://walnut.tv',
-        },
-      });
-    };
-
-    function onPlayerReady() {
-      // if we're playing a specific video (e.g. /general/b97ih5)
-      this.videoList[this.indexToPlay] && this.play(this.indexToPlay);
-    }
-    function onPlayerError() {
-      this.nextVideo();
-    }
-    function onPlayerStateChange(t) {
-      0 === t.data && this.autoplay && this.nextVideo();
-    }
     const paths = window.location.pathname.split('/').filter((a) => a);
     this.channel = paths.length === 1 ? paths[0] : 'general';
     this.fetchAllVideos();

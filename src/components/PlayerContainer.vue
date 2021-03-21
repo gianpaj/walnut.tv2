@@ -3,7 +3,7 @@
     <div class="video-container pre-scrollable">
       <div class="embed-container">
         <div class="videoPlayer">
-          <div id="player"></div>
+          <youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
         </div>
       </div>
       <div class="video-details">
@@ -97,19 +97,47 @@
 </template>
 
 <script>
+import VueYoutube from 'vue-youtube';
+
 export default {
   name: 'PlayerContainer',
   props: {
     playingVideo: Object,
   },
+  components: { VueYoutube },
   data() {
     return {
       videoPlaying: 0,
+      videoId: this.$props.playingVideo.youtubeId,
     };
   },
-  share() {},
-  prevVideo() {},
-  nextVideo() {},
+  methods: {
+    share(video) {
+      let url;
+      if (this.channel && this.playingVideo.permalink.includes('reddit.com')) {
+        url = `https://walnut.tv/${this.channel}/${video.id}`;
+      } else {
+        // YouTube
+        url = this.playingVideo.permalink;
+      }
+      // TODO use a Vue JS model
+      $('#shareModal').modal('show');
+      document.querySelector('#url-text').value = url;
+    },
+    prevVideo() {},
+    nextVideo() {},
+
+    onPlayerReady() {
+      // if we're playing a specific video (e.g. /general/b97ih5)
+      this.videoList[this.indexToPlay] && this.play(this.indexToPlay);
+    },
+    onPlayerError() {
+      this.nextVideo();
+    },
+    onPlayerStateChange(t) {
+      0 === t.data && this.autoplay && this.nextVideo();
+    },
+  },
 };
 </script>
 
