@@ -14,13 +14,14 @@
       <img v-show="showSpinner" src="./assets/spin.svg" class="loading-img" alt="Loading Videos" />
     </h2>
   </div>
+  <Modal />
 </template>
 
 <script>
-/* global YT */
 import NavBar from './components/NavBar.vue';
 import VideoList from './components/VideoList.vue';
 import PlayerContainer from './components/PlayerContainer.vue';
+import Modal from './components/Modal.vue';
 import { mixElementsFromArraysOfArrays, getStorage, setStorage } from './services/utils';
 import RedditVideoService from './services/reddit';
 import YouTubeService from './services/youtube';
@@ -39,6 +40,7 @@ export default {
     NavBar,
     PlayerContainer,
     VideoList,
+    Modal,
   },
   data() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
