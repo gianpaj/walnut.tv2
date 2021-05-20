@@ -1,5 +1,5 @@
 <template>
-  <NavBar :channels="channels" :channel="channel" />
+  <NavBar :channel="channel" :updateChannel="updateChannel" />
   <div v-show="!loadingVideos">
     <div class="container">
       <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
@@ -25,8 +25,8 @@ import Modal from './components/Modal.vue';
 import { mixElementsFromArraysOfArrays, getStorage, setStorage } from './services/utils';
 import RedditVideoService from './services/reddit';
 import YouTubeService from './services/youtube';
-import channels from './defaultChannels';
-
+import { c } from './defaultChannels';
+ 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const redditService = RedditVideoService();
@@ -47,7 +47,7 @@ export default {
     return {
       autoplay: true,
       channel: null,
-      channels,
+      channels: c,
       indexToPlay: 0,
       loadingVideos: true,
       mobile,
@@ -60,9 +60,11 @@ export default {
       voted: 0,
     };
   },
-  mounted() {
+  created() {
+    console.log('c', c);
     const paths = window.location.pathname.split('/').filter((a) => a);
     this.channel = paths.length === 1 ? paths[0] : 'general';
+    this.channel || (this.channel = 'general');
     this.fetchAllVideos();
     window.addEventListener('keyup', this.keys);
   },
@@ -70,13 +72,15 @@ export default {
     window.removeEventListener('keyup', this.keys);
   },
   methods: {
-    getSubReddits: (channel) => channels.find((c) => c.title == channel).subreddit,
-    getYouTubeChannels: (channel) => channels.find((c) => c.title == channel).youtubeChannels,
-    getChannelMinVotes: (channel) => channels.find((c) => c.title == channel).minNumOfVotes,
+    getSubReddits: (channel) => c.find((c) => c.title == channel).subreddit,
+    getYouTubeChannels: (channel) => c.find((c) => c.title == channel).youtubeChannels,
+    getChannelMinVotes: (channel) => c.find((c) => c.title == channel).minNumOfVotes,
     /**
      * @param {string} subreddits
      */
     fetchAllVideos(subreddits) {
+      console.log('subreddits', subreddits);
+      console.log('this.channel', this.channel);
       let id, minNumOfVotes, ytChannels, promises;
       const { pathname } = window.location;
       this.loadingVideos = true;
@@ -144,7 +148,7 @@ export default {
           // this.playingVideo = redditVideos;
           if (pathname.split('/').length === 3 && pathname.indexOf('/r/') === -1) {
             // find video index to play
-            let index = this.videoList.findIndex((v) => v.id === id);
+            const index = this.videoList.findIndex((v) => v.id === id);
             if (index !== -1) {
               this.indexToPlay = index;
               this.play(index);
@@ -162,6 +166,11 @@ export default {
           // eslint-disable-next-line no-console
           console.error(error);
         });
+    },
+    updateChannel(channel) {
+      this.channel = channel;
+      window.history.replaceState(null, null, '/' + channel);
+      this.fetchAllVideos();
     },
     keys(evt) {
       evt = evt || window.event;

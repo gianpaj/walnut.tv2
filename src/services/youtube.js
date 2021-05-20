@@ -1,4 +1,8 @@
+// TEMP
+/* eslint-disable no-unused-vars */
 import { mixElementsFromArraysOfArrays } from './utils';
+
+const youtubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
 
 export default function YouTubeService() {
   // function search(query) {
@@ -14,11 +18,24 @@ export default function YouTubeService() {
   // }
   async function loadChannels(channel_s) {
     channel_s = channel_s.split(';');
-    const searches = channel_s.map(channel => getYouTubeChannelSearch(channel));
-    const arrayOfArrayOfVideos = await Promise.all(searches);
+    // const searches = channel_s.map(channel => getYouTubeChannelSearch(channel));
+    // const arrayOfArrayOfVideos = await Promise.all(searches);
 
-    const videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
-    return [].concat.apply([], videos);
+    return [
+      {
+        id: 'videoId', // reddit id
+        permalink: `https://www.youtube.com/watch?v=${'videoId'}`,
+        title: 'decodeEntities(res.snippet.title)',
+        channelTitle: 'channelTitle',
+        description: 'description',
+        youtubeId: 'videoId',
+        imgUrl: toYouTubeImgUrl('videoId'),
+        publishedAt: new Date().toString(),
+      },
+    ];
+
+    // const videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
+    // return [].concat.apply([], videos);
   }
   function getYouTubeChannelSearch(channel) {
     // from youtube-api-v3-search npm

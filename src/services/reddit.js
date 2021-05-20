@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import offlineReddittData from '../offlineReddittData';
 import reddit from './reddit-package';
 import { mixElementsFromArraysOfArrays } from './utils';
 
@@ -120,6 +122,63 @@ export default function RedditVideoService() {
       let query = reddit.hot(subreddit).limit(50);
       if (after) query = query.after(after);
 
+      // console.log(subreddit);
+      if (subreddit == 'curiousvideos') {
+        // TODO: support "thumbnail": "nsfw"
+        const videos = [
+          {
+            title: 'curious That time the winning team on Survivor were tortured.',
+            id: 'mkby6c',
+            youtubeId: 'LC1Y0qT9X9Q',
+            permalink: `https://www.reddit.co/r/videos/comments/mkby6c/that_time_the_winning_team_on_survivor_were/`,
+            imgUrl: 'https://i.ytimg.com/vi/LC1Y0qT9X9Q/hqdefault.jpg',
+            created_utc: '',
+            ups: '',
+            voted: '',
+          },
+          {
+            title:
+              'curious Have you ever had a moment in your life where everything just lined up perfectly for you like this man here?',
+            id: 1,
+            youtubeId: 'a1',
+            permalink: `https://www.reddit.com/1`,
+            imgUrl: '',
+            created_utc: '',
+            ups: '',
+            voted: '',
+          },
+        ];
+        return result(videos);
+      }
+      if (subreddit == 'videos') {
+        // TODO: support "thumbnail": "nsfw"
+        const videos = [
+          {
+            title: 'General time the winning team on Survivor were tortured.',
+            id: 'mkby6c',
+            youtubeId: 'LC1Y0qT9X9Q',
+            permalink: `https://www.reddit.co/r/videos/comments/mkby6c/that_time_the_winning_team_on_survivor_were/`,
+            imgUrl: 'https://i.ytimg.com/vi/LC1Y0qT9X9Q/hqdefault.jpg',
+            created_utc: '',
+            ups: '',
+            voted: '',
+          },
+          {
+            title:
+              'general you ever had a moment in your life where everything just lined up perfectly for you like this man here?',
+            id: 1,
+            youtubeId: 'a1',
+            permalink: `https://www.reddit.com/1`,
+            imgUrl: '',
+            created_utc: '',
+            ups: '',
+            voted: '',
+          },
+        ];
+        return result(videos);
+      }
+
+      // eslint-disable-next-line no-unreachable
       query.fetch(
         res => {
           if (res.error) return reject(res);

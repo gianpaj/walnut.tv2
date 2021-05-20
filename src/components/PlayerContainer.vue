@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 <template>
   <div class="main-content">
     <div class="video-container pre-scrollable">
@@ -10,13 +11,7 @@
         <a href="{{ playingVideo['permalink'] }}" target="_blank">
           <h2 v-cloak>{{ playingVideo['title'] }}</h2>
         </a>
-        <img
-          alt="share"
-          title="share"
-          class="share-icon pull-left"
-          src="/img/share.svg"
-          v-on:click="share(playingVideo)"
-        />
+        <img alt="share" title="share" class="share-icon pull-left" src="/img/share.svg" @click="share(playingVideo)" />
         <!-- <div v-if="playingVideo['ups']">
             <svg
                 alt="upvote"
@@ -97,14 +92,14 @@
 </template>
 
 <script>
-import VueYoutube from 'vue-youtube';
+// import VueYoutube from 'vue-youtube';
 
 export default {
   name: 'PlayerContainer',
   props: {
     playingVideo: Object,
   },
-  components: { VueYoutube },
+  // components: { VueYoutube },
   data() {
     return {
       videoPlaying: 0,
@@ -121,7 +116,7 @@ export default {
         url = this.playingVideo.permalink;
       }
       // TODO use a Vue JS model
-      $('#shareModal').modal('show');
+      // $('#shareModal').modal('show');
       document.querySelector('#url-text').value = url;
     },
     prevVideo() {},

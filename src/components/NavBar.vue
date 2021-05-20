@@ -20,7 +20,7 @@
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
               <ul class="nav navbar-nav">
                 <li
-                  v-for="item in channels"
+                  v-for="item in channels2"
                   v-bind:class="{
                     active: item.title == channel && !searchInput,
                   }"
@@ -35,7 +35,7 @@
           <div class="hide-mobile-portrait mobile-navbar-portrait">
             <ul class="nav navbar-nav">
               <li
-                v-for="item in channels"
+                v-for="item in c"
                 v-bind:key="item.title"
                 v-bind:class="{ active: item.title == channel && !searchInput }"
               >
@@ -81,17 +81,43 @@
 </template>
 
 <script>
+import { c } from '../defaultChannels';
+
 export default {
   name: 'NavBar',
   props: {
-    channels: Array,
-    channel: String,
+    channel: {
+      type: String,
+      required: true,
+    },
+    updateChannel: {
+      type: Function,
+      required: true,
+    },
   },
   data() {
     return {
       searchInput: '',
+      channels: c,
       //   videoPlaying: 0,
     };
+  },
+  created() {
+    console.log('this.channels2', this.c);
+    // FIXME: receiving a proxu
+    // this.NavBarChannels2 = JSON.parseJSON.stringify(this.channels2)
+  },
+  methods: {
+    changeChannel: function (channel) {
+      this.searchInput = '';
+      if (this.channel !== channel) {
+        // player.stopVideo();
+        // this.channel = channel;
+        this.updateChannel(channel);
+      }
+      // eslint-disable-next-line no-undef
+      $('#navbar-collapse-1').collapse('hide');
+    },
   },
 };
 </script>
