@@ -50,7 +50,7 @@ reddit.random = function(subreddit) {
 };
 
 reddit.info = function(subreddit) {
-  var on = {
+  const on = {
     subreddit: subreddit,
     resource: 'api/info',
   };
@@ -58,7 +58,7 @@ reddit.info = function(subreddit) {
 };
 
 reddit.comments = function(article, subreddit) {
-  var on = {
+  const on = {
     subreddit: subreddit,
     resource: 'comments/' + article,
   };
@@ -66,14 +66,14 @@ reddit.comments = function(article, subreddit) {
 };
 
 reddit.recommendedSubreddits = function(srnames) {
-  var on = {
+  const on = {
     resource: 'api/recommend/sr/' + srnames,
   };
   return withFilters(on, ['omit']);
 };
 
 reddit.subredditsByTopic = function(query) {
-  var on = {
+  const on = {
     resource: 'api/subreddits_by_topic',
     params: {
       query: query,
@@ -83,7 +83,7 @@ reddit.subredditsByTopic = function(query) {
 };
 
 reddit.search = function(query, subreddit) {
-  var on = {
+  const on = {
     subreddit: subreddit,
     resource: 'search',
     params: {
@@ -115,7 +115,7 @@ reddit.newSubreddits = function() {
 };
 
 reddit.user = function(username, where) {
-  var on = {
+  const on = {
     resource: 'user/' + username + (typeof where === 'undefined' ? '' : '/' + where),
   };
   return withFilters(on, ['show', 'sort', 't', 'type', 'username', 'after', 'before', 'count', 'limit', 'sr_detail']);
@@ -135,13 +135,13 @@ function fetch(on) {
 }
 
 function withFilters(on, filters) {
-  var ret = {};
+  const ret = {};
   on.params = on.params || {};
   filters = filters || [];
 
-  var without = function(object, key) {
-    var ret = {};
-    for (var prop in object) {
+  const without = function(object, key) {
+    const ret = {};
+    for (const prop in object) {
       if (Object.prototype.hasOwnProperty.call(object, prop) && prop !== key) {
         ret[prop] = object[prop];
       }
@@ -149,7 +149,7 @@ function withFilters(on, filters) {
     return ret;
   };
 
-  var filter = function(f) {
+  const filter = function(f) {
     if (f === 'show') {
       return function() {
         on.params[f] = 'all';
@@ -163,7 +163,7 @@ function withFilters(on, filters) {
     }
   };
 
-  for (var i = 0; i < filters.length; i++) {
+  for (let i = 0; i < filters.length; i++) {
     ret[filters[i]] = filter(filters[i]);
   }
   ret.fetch = function(res, err) {
@@ -173,10 +173,10 @@ function withFilters(on, filters) {
 }
 
 function redditUrl(on) {
-  var url = 'https://www.reddit.com/';
-  var keys = function(object) {
-    var ret = [];
-    for (var prop in object) {
+  let url = 'https://www.reddit.com/';
+  const keys = function(object) {
+    const ret = [];
+    for (const prop in object) {
       if (Object.prototype.hasOwnProperty.call(object, prop)) {
         ret.push(prop);
       }
@@ -189,8 +189,8 @@ function redditUrl(on) {
   }
   url += on.resource + '.json';
   if (keys(on.params).length > 0) {
-    var qs = [];
-    for (var param in on.params) {
+    const qs = [];
+    for (const param in on.params) {
       if (Object.prototype.hasOwnProperty.call(on.params, param)) {
         qs.push(encodeURIComponent(param) + '=' + encodeURIComponent(on.params[param]));
       }
@@ -211,7 +211,7 @@ function getJSON(url, res, err) {
 }
 
 function get(url, res, err) {
-  var xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
   xhr.onload = function() {
     return res(xhr.response);
